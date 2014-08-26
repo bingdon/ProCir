@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/Layout2"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" >
+
+        <ImageView
+            android:id="@+id/p_home_page_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/content_bg"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/p_home_page_headimg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/touxiang_01"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/main_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="50dp"
+            android:layout_toRightOf="@+id/p_home_page_headimg"
+            android:scaleType="fitXY"
+            android:text="ssss"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/main_career"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="90dp"
+            android:layout_toRightOf="@+id/p_home_page_headimg"
+            android:scaleType="fitXY"
+            android:text="ssss"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/main_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="90dp"
+            android:layout_toRightOf="@+id/main_career"
+            android:scaleType="fitXY"
+            android:text="sssssssss"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+</FrameLayout>
