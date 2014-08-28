@@ -118,7 +118,7 @@ public class MyPersonBean implements Serializable{
 	}
 
 	public String getCreatetime() {
-		return createtime;
+		return ""+createtime;
 	}
 
 	public void setCreatetime(String createtime) {
@@ -150,7 +150,7 @@ public class MyPersonBean implements Serializable{
 	}
 
 	public String getId() {
-		return id;
+		return ""+id;
 	}
 
 	public void setId(String id) {
@@ -206,7 +206,7 @@ public class MyPersonBean implements Serializable{
 	}
 
 	public String getTel() {
-		return tel;
+		return ""+tel;
 	}
 
 	public void setTel(String tel) {

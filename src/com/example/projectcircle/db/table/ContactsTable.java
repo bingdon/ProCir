@@ -17,5 +17,7 @@ public class ContactsTable implements BaseColumns {
 	public static final String UID = "uid";
 	
 	public static final String TEL = "tel";
+	
+	public static final String STATE="state";
 
 }

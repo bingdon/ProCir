@@ -42,6 +42,24 @@ public class FriendDatabaseUtils implements FriendDatabasePle {
 		return del;
 
 	}
+	
+	public Object delete(String id) {
+		// TODO Auto-generated method stub
+
+		int del = -1;
+		try {
+			String where = FriendDate.FRI_ID + " = ?";
+			String[] whereArgs = { String.valueOf(id) };
+			del = ProJectDatebase.proDatabase.delete(FriendDate.TAB_NAME,
+					where, whereArgs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return del;
+
+	}
+	
+	
 
 	@Override
 	public long insert(String name, String friid, String headimg) {

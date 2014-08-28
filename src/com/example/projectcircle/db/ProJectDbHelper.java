@@ -50,9 +50,9 @@ public class ProJectDbHelper extends SQLiteOpenHelper {
 			+ ContactsTable.TABLE_NAME + "(" + ContactsTable._ID
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
 			+ ContactsTable.UID + " TEXT," + ContactsTable.TEL + " VCHAR,"
-			+ ContactsTable.NAME + " TEXT," + ContactsTable.HEAD_IMAG + " TEXT"
-			+ ContactsTable.TIME + " TEXT," + ContactsTable.TYPE + " INTEGER"
-			+ ")";
+			+ ContactsTable.NAME + " TEXT," + ContactsTable.HEAD_IMAG + " TEXT,"
+			+ ContactsTable.TIME + " TEXT," + ContactsTable.TYPE + " INTEGER,"
+			+ ContactsTable.STATE + " INTEGER" + ")";
 
 	public ProJectDbHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -68,7 +68,7 @@ public class ProJectDbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-		if (oldVersion < 2) {
+		if (oldVersion <=1) {
 			UpgradeUtilty.upgrade1to2(db);
 		}
 	}
@@ -78,6 +78,7 @@ public class ProJectDbHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_MSG_DB);
 		db.execSQL(CREATE_GROUP_DB);
 		db.execSQL(CREATE_IS_OR_NOT_ADD_FRI_DB);
+		db.execSQL(CREATE_NEW_CONSTACT_DB);
 	}
 
 }

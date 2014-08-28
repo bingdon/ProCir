@@ -3,7 +3,7 @@ package com.example.projectcircle.friend;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,11 +11,9 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -40,15 +38,15 @@ import android.widget.TextView;
 
 import com.example.projectcircle.LoginActivity;
 import com.example.projectcircle.R;
+import com.example.projectcircle.bean.MyPersonBean;
 import com.example.projectcircle.bean.UserInfo;
 import com.example.projectcircle.friend.Contact.MyListAdapter;
 import com.example.projectcircle.friend.Contact.ViewHolder;
 import com.example.projectcircle.util.MyHttpClient;
 import com.example.projectcircle.util.ToastUtils;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-
-@SuppressLint("ResourceAsColor")
-public class Contact extends Activity{
+@Deprecated
+public class Contact extends Activity {
 
 	Context mContext = Contact.this;
 
@@ -76,10 +74,13 @@ public class Contact extends Activity{
 
 	/** 联系人头像 **/
 	private ArrayList<Bitmap> mContactsPhonto = new ArrayList<Bitmap>();
-   //注册但不是好友的arraylist的电话号码
+	// 注册但不是好友的arraylist的电话号码
 	private ArrayList<String> regist_not_friend_number = new ArrayList<String>();
-   //注册但不是好友的arraylist的名字
+	// 注册但不是好友的arraylist的名字
 	private ArrayList<String> regist_not_friend_name = new ArrayList<String>();
+	
+	private List<MyPersonBean> liPersonBeans=new ArrayList<>();
+	
 	ListView mListView = null;
 	MyListAdapter myAdapter = null;
 	private ArrayList<String> telStrings;
@@ -96,7 +97,7 @@ public class Contact extends Activity{
 
 	JSONArray json1, json2, json3;
 	String aid = LoginActivity.id;
-	String bid;//已注册过的通讯录中联系人的id
+	String bid;// 已注册过的通讯录中联系人的id
 	HashMap<String, Object> contactmap = new HashMap<String, Object>();
 	private ArrayList<String> regist_and_friend_number = new ArrayList<String>();
 	private ArrayList<String> regist_and_friend_name = new ArrayList<String>();
@@ -107,12 +108,13 @@ public class Contact extends Activity{
 
 	private ArrayList<UserInfo> friendRequestList;
 	private static final String TAG = Contact.class.getSimpleName();
+
 	@Override
-	public void onCreate(Bundle savedInstanceState) {	
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.concat_friend_list);
 		telStrings = getIntent().getStringArrayListExtra("tels");
-		myid = LoginActivity.id;// 获取我的登录id	
+		myid = LoginActivity.id;// 获取我的登录id
 		FriendRequestList(myid);
 		/** 得到手机通讯录联系人信息 **/
 		getPhoneContacts();
@@ -122,27 +124,32 @@ public class Contact extends Activity{
 		// mContactsNumber=mContactsNumber.replace("]","");
 		now_number = mContactsNumber.toString().substring(1,
 				mContactsNumber.toString().length() - 1);// 去掉ArrayList中的【和】这个再开头和结尾有，要不后台识别不出来
-		now_number = now_number.replace(" ", "");//去掉所有空格，要不后台识别不出来
+		now_number = now_number.replace(" ", "");// 去掉所有空格，要不后台识别不出来
 		isRegist(now_number, myid);
-	   back();
+		back();
 	}
-	 //返回
-		private void back() {
-			// TODO Auto-generated method stub
-			button_back = (Button) findViewById(R.id.g_list_left);
-			button_back.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					Contact.this.setResult(RESULT_OK, getIntent());
-					Contact.this.finish();
-				}
-			});
-		}
-	/** 得到手机通讯录联系人信息 
-	 * @return **/
-	public  ArrayList<String> getPhoneContacts() {
+	// 返回
+	private void back() {
+		// TODO Auto-generated method stub
+		button_back = (Button) findViewById(R.id.g_list_left);
+		button_back.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Contact.this.setResult(RESULT_OK, getIntent());
+				Contact.this.finish();
+			}
+		});
+	}
+
+	/**
+	 * 得到手机通讯录联系人信息
+	 * 
+	 * @return
+	 **/
+	public ArrayList<String> getPhoneContacts() {
 		ContentResolver resolver = mContext.getContentResolver();
 
 		// 获取手机联系人
@@ -194,7 +201,7 @@ public class Contact extends Activity{
 
 			phoneCursor.close();
 			// Log.i("判断传入后台的电话号码",mContactsNumber+"");
-		
+
 		}
 		return mContactsNumber;
 	}
@@ -236,7 +243,7 @@ public class Contact extends Activity{
 				holder.image = (Button) convertView
 						.findViewById(R.id.invitation);
 				holder.username = (TextView) convertView
-						.findViewById(R.id.username);              
+						.findViewById(R.id.username);
 				holder.message = (TextView) convertView
 						.findViewById(R.id.message);
 				convertView.setTag(holder);// 绑定ViewHolder对象
@@ -245,39 +252,40 @@ public class Contact extends Activity{
 			}
 			// 绘制联系人名称
 			holder.username.setText(regist_not_friend_name.get(position));
-//			holder.image.setOnClickListener(new OnClickListener() {
-//
-//				@Override
-//				public void onClick(View arg0) {
-//					// TODO Auto-generated method stub
-//					Uri uri = Uri.parse("smsto:" + mContactsName.get(position));
-//					Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-//					it.putExtra("sms_body", "我在用工程圈的软件，非常好用，你也注册用一下吧！");
-//					startActivity(it);
-//				}
-//			});
-			// 获取此电话号码,number必须定义成final String类型的，要理解position的意义			
-			number = regist_not_friend_number.get(position) + "";	
+			// holder.image.setOnClickListener(new OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View arg0) {
+			// // TODO Auto-generated method stub
+			// Uri uri = Uri.parse("smsto:" + mContactsName.get(position));
+			// Intent it = new Intent(Intent.ACTION_SENDTO, uri);
+			// it.putExtra("sms_body", "我在用工程圈的软件，非常好用，你也注册用一下吧！");
+			// startActivity(it);
+			// }
+			// });
+			// 获取此电话号码,number必须定义成final String类型的，要理解position的意义
+			number = regist_not_friend_number.get(position) + "";
 			// 判断是否已经注册
-//			if (contactmap.get(number) == "1") {
-//				holder.image.setText("邀请");
-//				holder.image.setBackgroundColor(R.color.transparent);
-//			} else
-			if (contactmap.get(number) == "2") {	
+			// if (contactmap.get(number) == "1") {
+			// holder.image.setText("邀请");
+			// holder.image.setBackgroundColor(R.color.transparent);
+			// } else
+			if (contactmap.get(number) == "2") {
 				holder.image.setText("已添加");
-				
+
 			} else if (contactmap.get(number) == "3") {
-				//holder.image.setText("添加");
-				Resources resources = getBaseContext().getResources();   
-				Drawable btnDrawable = resources.getDrawable(R.drawable.add_new_contact_selector);  
-				holder.image.setBackgroundDrawable(btnDrawable);   
-				holder.image.setOnClickListener( new OnClickListener() {
-					
+				// holder.image.setText("添加");
+				Resources resources = getBaseContext().getResources();
+				Drawable btnDrawable = resources
+						.getDrawable(R.drawable.add_new_contact_selector);
+				holder.image.setBackgroundDrawable(btnDrawable);
+				holder.image.setOnClickListener(new OnClickListener() {
+
 					@Override
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
-						//根据电话号码查找用户信息，以获得其id					
-						findUserByTel(number);						
+						// 根据电话号码查找用户信息，以获得其id
+						findUserByTel(number);
 					}
 				});
 			}
@@ -290,15 +298,15 @@ public class Contact extends Activity{
 	public final class ViewHolder {
 
 		public TextView message;
-		public TextView username;//用户名
-		public ImageView headimg;//头像
-		public Button image;//同意还是添加的图片
+		public TextView username;// 用户名
+		public ImageView headimg;// 头像
+		public Button image;// 同意还是添加的图片
 
 	}
 
 	private void isRegist(String now_number, String id) {
 		// TODO Auto-generated method stub
-		AsyncHttpResponseHandler res = new AsyncHttpResponseHandler() {	
+		AsyncHttpResponseHandler res = new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(String response) {
 				// TODO Auto-generated method stub
@@ -312,44 +320,49 @@ public class Contact extends Activity{
 					for (int i = 0; i < mContactsNumber.size(); i++) {
 						if (isIn(mContactsNumber.get(i), json1)) {
 							contactmap.put(mContactsNumber.get(i), "1");
-						
+
 						} else if (isIn(mContactsNumber.get(i), json2)) {
 							contactmap.put(mContactsNumber.get(i), "2");
-						
+
 						} else if (isIn(mContactsNumber.get(i), json3)) {
 							contactmap.put(mContactsNumber.get(i), "3");
-					
+
 						}
 					}
-					//注册过但不是好友的提到前面来	
-					Log.i("contactmap在regist之后", contactmap+"");
-					for(int i = 0,len =  mContactsNumber.size();i <len; ++i){			
+					// 注册过但不是好友的提到前面来
+					Log.i("contactmap在regist之后", contactmap + "");
+					for (int i = 0, len = mContactsNumber.size(); i < len; ++i) {
 						if (contactmap.get(mContactsNumber.get(i)) == "3") {
-							regist_not_friend_number.add(mContactsNumber.get(i));
-							regist_not_friend_name.add(mContactsName.get(i));	
-//							mContactsNumber.remove(i);
-//							mContactsName.remove(i);
-//							 --len;//减少一个  
-//						       --i;//多谢deny_guoshou指正，如果不加会出现评论1楼所说的情况。  
-						
-						}	
-						else if (contactmap.get(mContactsNumber.get(i)) == "2") {
-							regist_and_friend_number.add(mContactsNumber.get(i));
-							regist_and_friend_name.add(mContactsName.get(i));	
-//							mContactsNumber.remove(i);
-//							mContactsName.remove(i);
-//							 --len;//减少一个  
-//						       --i;//多谢deny_guoshou指正，如果不加会出现评论1楼所说的情况。  
-						
-						}	
+							regist_not_friend_number
+									.add(mContactsNumber.get(i));
+							regist_not_friend_name.add(mContactsName.get(i));
+							// mContactsNumber.remove(i);
+							// mContactsName.remove(i);
+							// --len;//减少一个
+							// --i;//多谢deny_guoshou指正，如果不加会出现评论1楼所说的情况。
+
+						} else if (contactmap.get(mContactsNumber.get(i)) == "2") {
+							regist_and_friend_number
+									.add(mContactsNumber.get(i));
+							regist_and_friend_name.add(mContactsName.get(i));
+							// mContactsNumber.remove(i);
+							// mContactsName.remove(i);
+							// --len;//减少一个
+							// --i;//多谢deny_guoshou指正，如果不加会出现评论1楼所说的情况。
+
+						}
 					}
-					Log.i("regist_not_friend_number----前",regist_not_friend_number+"");
-					Log.i("regist_not_friend_name----前",regist_not_friend_name+"");
-					regist_not_friend_number.addAll(regist_and_friend_number);//两个数组拼接
-					regist_not_friend_name.addAll(regist_and_friend_name);//两个数组拼接
-					Log.i("regist_not_friend_number----后",regist_not_friend_number+"");
-					Log.i("regist_not_friend_name----后",regist_not_friend_name+"");
-				    InitList();
+					Log.i("regist_not_friend_number----前",
+							regist_not_friend_number + "");
+					Log.i("regist_not_friend_name----前", regist_not_friend_name
+							+ "");
+					regist_not_friend_number.addAll(regist_and_friend_number);// 两个数组拼接
+					regist_not_friend_name.addAll(regist_and_friend_name);// 两个数组拼接
+					Log.i("regist_not_friend_number----后",
+							regist_not_friend_number + "");
+					Log.i("regist_not_friend_name----后", regist_not_friend_name
+							+ "");
+					InitList();
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -364,40 +377,43 @@ public class Contact extends Activity{
 
 	private void InitList() {
 		// TODO Auto-generated method stub
-		listView =(ListView)findViewById(R.id.concat_list_listView);
+		listView = (ListView) findViewById(R.id.concat_list_listView);
 		myAdapter = new MyListAdapter(this);
 		listView.setAdapter(myAdapter);
 	}
+
 	// 判断字符串数组中是否含有某一字符串
 	private static boolean isIn(String substring, JSONArray source)
 			throws JSONException {
 		if (source == null || source.length() == 0) {
 			return false;
 		}
-		int length=source.length();		
+		int length = source.length();
 		for (int i = 0; i < length; i++) {
 			String aSource = (String) source.get(i);
-//			Log.i(TAG, "号码:"+substring+"::"+aSource+"::"+(aSource.equals(substring)));
+			// Log.i(TAG,
+			// "号码:"+substring+"::"+aSource+"::"+(aSource.equals(substring)));
 			if (aSource.equals(substring)) {
-//				Log.i(TAG, "asource:" + aSource);
+				// Log.i(TAG, "asource:" + aSource);
 				return true;
 			}
 		}
 		return false;
 	}
-	private void applyfriend(String aid, String bid,String info) {
+
+	private void applyfriend(String aid, String bid, String info) {
 		// TODO Auto-generated method stub
 		AsyncHttpResponseHandler res = new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(String response) {
 				// TODO Auto-generated method stub
-				Log.i("返回", response);				
+				Log.i("返回", response);
 				JSONObject obj;
 				try {
 					obj = new JSONObject(response);
-					if (obj.getInt("result") == 1) {					
+					if (obj.getInt("result") == 1) {
 						ToastUtils.showLong(getApplicationContext(),
-								"申请完毕，等待好友通过验证");					
+								"申请完毕，等待好友通过验证");
 					} else {
 						ToastUtils.showShort(getApplicationContext(),
 								"死样，消息已发送，请勿重复添加~~");
@@ -418,21 +434,20 @@ public class Contact extends Activity{
 			@Override
 			public void onSuccess(String response) {
 				// TODO Auto-generated method stub
-				Log.i("返回", response);				
+				Log.i("返回", response);
 				JSONObject obj;
 				try {
 					obj = new JSONObject(response);
 					if (obj.getInt("result") == 1) {
 						JSONObject user = obj.getJSONObject("user");
 						bid = user.getString("id");
-						//申请好友，上边findUserByTel方法找bid是异步的，得判断一下
+						// 申请好友，上边findUserByTel方法找bid是异步的，得判断一下
 						String info = "通讯录联系人";
-						//得到这个电话号码对应的Id后，开始申请好友
-						applyfriend(aid,  bid, info);//得写到这里边
-				
+						// 得到这个电话号码对应的Id后，开始申请好友
+						applyfriend(aid, bid, info);// 得写到这里边
+
 					} else {
-						ToastUtils.showShort(getApplicationContext(),
-								"没找到！");
+						ToastUtils.showShort(getApplicationContext(), "没找到！");
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -442,8 +457,9 @@ public class Contact extends Activity{
 		};
 		MyHttpClient client = new MyHttpClient();
 		client.findUserByTel(number, res);
-		
+
 	}
+
 	private void FriendRequestList(String bid) {
 		// TODO Auto-generated method stub
 		AsyncHttpResponseHandler res = new AsyncHttpResponseHandler() {
@@ -452,36 +468,37 @@ public class Contact extends Activity{
 				// TODO Auto-generated method stub
 				Log.i("返回：", response);
 				parseFriendRequestList(response);
-//				initList();				
+				// initList();
 			}
 
 		};
 		MyHttpClient client = new MyHttpClient();
 		client.FriendRequestMessage(bid, res);
 	}
+
 	private void parseFriendRequestList(String response) {
 		// TODO Auto-generated method stub
-		 try {
-			 Log.i("解析好友请求的response", response+"");
-			 JSONObject result = new JSONObject(response);
-			 JSONObject obj = result.getJSONObject("friends");
-			 friendRequestList = new ArrayList<UserInfo>();
-			 JSONArray json = obj.getJSONArray("resultlist");
-			 int length = json.length();
-			 System.out.println("length==" + length);
-			 Log.i(TAG, "JSONArray:"+json);
-			 for (int i = 0; i < length; i++) {
-			 UserInfo user = new UserInfo();
-			 JSONObject objo = json.getJSONObject(i);
-			 Log.i(TAG, "objo:"+objo);
-			 user.setId(objo.getString("cid"));
-			 user.setUsername(objo.getString("username"));
-		     user.setInfo(objo.getString("info"));
-		     friendRequestList.add(user);
-			 }
-			 } catch (JSONException e) {
-			 e.printStackTrace();
-			 }
+		try {
+			Log.i("解析好友请求的response", response + "");
+			JSONObject result = new JSONObject(response);
+			JSONObject obj = result.getJSONObject("friends");
+			friendRequestList = new ArrayList<UserInfo>();
+			JSONArray json = obj.getJSONArray("resultlist");
+			int length = json.length();
+			System.out.println("length==" + length);
+			Log.i(TAG, "JSONArray:" + json);
+			for (int i = 0; i < length; i++) {
+				UserInfo user = new UserInfo();
+				JSONObject objo = json.getJSONObject(i);
+				Log.i(TAG, "objo:" + objo);
+				user.setId(objo.getString("cid"));
+				user.setUsername(objo.getString("username"));
+				user.setInfo(objo.getString("info"));
+				friendRequestList.add(user);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 
 	}
 }

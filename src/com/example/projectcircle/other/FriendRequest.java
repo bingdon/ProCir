@@ -69,7 +69,7 @@ public class FriendRequest extends Activity{
 			 UserInfo user = new UserInfo();
 			 JSONObject objo = json.getJSONObject(i);
 			 Log.i(TAG, "objo:"+objo);
-//			 user.setId(objo.getString("cid"));
+			 user.setId(objo.getString("cid"));
 			 user.setUsername(objo.getString("username"));
 		     user.setInfo(objo.getString("info"));
 		     friendRequestList.add(user);
@@ -94,7 +94,7 @@ public class FriendRequest extends Activity{
 		for (int i = 0; i < friendRequestList.size(); i++) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			//map.put("friendID", friendList.get(i).getId());
-//			map.put("cid", friendRequestList.get(i).getId());
+			map.put("cid", friendRequestList.get(i).getId());
 			map.put("info", friendRequestList.get(i).getInfo());
 //			map.put("headimage", friendList.get(i).getHeadimage());
 			map.put("username", friendRequestList.get(i).getUsername());

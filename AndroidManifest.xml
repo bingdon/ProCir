@@ -382,6 +382,7 @@
         <activity android:name=".other.GroupChatOther"></activity>
         <activity android:name=".setting.SettingActivity" android:theme="@style/AppTheme"></activity>
         <activity android:name=".setting.MsgSettingActivity" android:theme="@style/AppNotitleTheme"></activity>
+        <activity android:name=".friend.NewFriendActivity" android:theme="@style/AppNotitleTheme"></activity>
     </application>
 
 </manifest>

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.projectcircle.R;
+import com.example.projectcircle.debug.AppLog;
 import com.example.projectcircle.friend.FriendPage;
 import com.example.projectcircle.job.postStatus;
 import com.example.projectcircle.util.MyHttpClient;
@@ -117,6 +118,7 @@ public class FriendRequestAdapter extends BaseAdapter {
 
 	protected void befriend(String accept_id,final int position) {
 		// TODO Auto-generated method stub	
+		AppLog.i("FriendRequestAdapter", "Ω” ’:"+accept_id);
 			AsyncHttpResponseHandler res = new AsyncHttpResponseHandler() {
 				private FriendPage receiver2;
 

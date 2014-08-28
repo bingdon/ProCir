@@ -2,10 +2,7 @@ package com.example.projectcircle.group;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -38,7 +34,6 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.projectcircle.LoginActivity;
 import com.example.projectcircle.R;
-import com.example.projectcircle.bean.UserInfo;
 import com.example.projectcircle.util.ImageUtil;
 import com.example.projectcircle.util.MyHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -145,7 +140,7 @@ public class CreateGroup extends Activity {
 			province = location.getProvince(); // 获取省份信息
 			city = location.getCity(); // 获取城市信息
 			district = location.getDistrict(); // 获取区县信息
-		    group_place.setText(province+city+district+"");
+		    group_place.setText(""+location.getAddrStr());
 		    Log.i("创建群组所在的省", province);
 		    Log.i("创建群组所在的市", city);
 		    Log.i("创建群组所在的县", district);
@@ -247,7 +242,6 @@ public class CreateGroup extends Activity {
 	 * 提交状态
 	 * 
 	 */
-	@SuppressWarnings("deprecation")
 	private void next() {
 		// TODO Auto-generated method stub
 		uid = LoginActivity.id;
@@ -334,11 +328,12 @@ public class CreateGroup extends Activity {
 					    gid = result.getString("id");
 						postHeadStart(gid);						
 					} else {
-
+						progressDialog.dismiss();
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					progressDialog.dismiss();
 				}
 			}
 
@@ -355,6 +350,10 @@ public class CreateGroup extends Activity {
 			headimage =ImageUtil.bitmaptoString(myBitmap);		
 			//System.out.println(headimage);
 			postGroupHeadImage(gid, headimage);
+		}
+		else {
+			progressDialog.dismiss();
+			postfinish();
 		}
 	}
 

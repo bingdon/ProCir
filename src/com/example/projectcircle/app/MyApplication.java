@@ -13,6 +13,7 @@ import com.baidu.frontia.FrontiaApplication;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
 import com.baidu.mapapi.map.MKEvent;
+import com.example.projectcircle.R;
 import com.example.projectcircle.bean.MyPersonBean;
 import com.example.projectcircle.bean.PersonalInfo;
 import com.example.projectcircle.bean.UserInfo;
@@ -20,6 +21,7 @@ import com.example.projectcircle.other.ImageInfo;
 import com.example.projectcircle.util.FileUtils;
 import com.example.projectcircle.util.SdUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -46,6 +48,18 @@ public class MyApplication  extends FrontiaApplication  {
 	// public static final String strKey = "N0p7SXZ0oy7vi89590qwSYTQ";
 //	private static Foods foods;
 	private static List<ImageInfo> headerImaList = new ArrayList<ImageInfo>();
+
+	private static ImageLoader imageLoader=ImageLoader.getInstance();
+	
+	public static ImageLoader getImageLoader() {
+		return imageLoader;
+	}
+
+	private static DisplayImageOptions options;
+	
+	public static DisplayImageOptions getOptions() {
+		return options;
+	}
 
 	public static MyPersonBean getMyPersonBean() {
 		return myPersonBean;
@@ -95,7 +109,13 @@ public class MyApplication  extends FrontiaApplication  {
 				.build();
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
-
+		options = new DisplayImageOptions.Builder().cacheInMemory(true) // 加载图片时会在内存中加载缓存
+				.showStubImage(R.drawable.icon_qunzu)// 设置图片在下载期间显示的图片
+				.showImageForEmptyUri(R.drawable.icon_qunzu)//
+				.showImageOnFail(R.drawable.icon_qunzu)//
+				.cacheInMemory(true)// 是否緩存都內存中
+				.cacheOnDisc(true)// 是否緩存到sd卡上
+				.build();
 
 	}
 

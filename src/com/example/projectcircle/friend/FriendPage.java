@@ -512,7 +512,7 @@ public class FriendPage extends Activity {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 
-			Intent intent = new Intent(FriendPage.this, Contact.class);
+			Intent intent = new Intent(FriendPage.this, NewFriendActivity.class);
 			getTel();
 			intent.putStringArrayListExtra("tels", tel);
 			startActivity(intent);

@@ -94,6 +94,7 @@
     <string name="searchdialog_find_contact_new">搜索</string>
     <string name="jzhu">机主</string>
     <string name="add">添加</string>
+    <string name="added">已添加</string>
     <string name="movebusin">移动商家</string>
     <string name="groupnotice">群组是扩展人脉和保持联系的最好方式</string>
     <string name="tabat">附近</string>
@@ -118,6 +119,11 @@
     <string name="msg_notice">消息提醒</string>
     <string name="sound_notice">声音提醒</string>
     <string name="vir_notice">震动提醒</string>
+    <string name="phone_conts">手机联系人</string>
+    <string name="request_fri">请求添加您为好友</string>
+    <string name="contacts_">通讯录联系人</string>
+    <string name="accpet">接受</string>
+    <string name="erro_no">未知错误</string>
     <string name="agree_user_protocol">"                                "用户协议\n
 用户须知：\n
 "    "北京土立方科技有限公司（以下简称“土立方科技”）在此特别提醒:\n

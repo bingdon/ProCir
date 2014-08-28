@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class MsgSettingActivity extends Activity {
 	private static final String TAG = MsgSettingActivity.class.getSimpleName();
@@ -78,6 +80,15 @@ public class MsgSettingActivity extends Activity {
 			}
 		});
 
+		findViewById(R.id.back).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+		
 		initPerference();
 	}
 

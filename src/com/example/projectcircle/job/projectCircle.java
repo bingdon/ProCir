@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.projectcircle.LoginActivity;
 import com.example.projectcircle.R;
 import com.example.projectcircle.adpter.CircleAdapter;
 import com.example.projectcircle.adpter.ProCirAdapter;
@@ -94,8 +95,8 @@ public class projectCircle extends Activity implements OnRefreshListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);// 设置头部title不让它显示
 		setContentView(R.layout.project_circle);
-		// myid = LoginActivity.id;
-		myid = "1";
+		 myid = LoginActivity.id;
+//		myid = "1";
 		// 初始化刷新控件
 		refeshInit();
 		doListMood();

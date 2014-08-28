@@ -34,46 +34,44 @@ public class NoticeUtils {
 
 		switch (id) {
 		case ContantS.CHAT_MSG:
-			
-			
+
 			pendingIntent = PendingIntent
 					.getActivity(context, 0, new Intent(context,
 							MainActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 			if (!MsgSettingActivity.getIsmsg(context)) {
 				return;
 			}
-			
-			if (MsgSettingActivity.getIssound(context)&&MsgSettingActivity.getIsvir(context)) {
+
+			if (MsgSettingActivity.getIssound(context)
+					&& MsgSettingActivity.getIsvir(context)) {
 				notification = new NotificationCompat.Builder(context)
-				.setTicker(man).setContentText(man)
-				.setContentTitle(man)
-				.setContentIntent(pendingIntent).setContentText(message)
-				.setSmallIcon(R.drawable.logo)
-				.setDefaults(Notification.DEFAULT_ALL)
-				.setAutoCancel(true)
-				.build();
-			}else if (MsgSettingActivity.getIssound(context)) {
+						.setTicker(man).setContentText(man)
+						.setContentTitle(man).setContentIntent(pendingIntent)
+						.setContentText(message).setSmallIcon(R.drawable.logo)
+						.setDefaults(Notification.DEFAULT_ALL)
+						.setAutoCancel(true).build();
+			} else if (MsgSettingActivity.getIssound(context)) {
 				notification = new NotificationCompat.Builder(context)
-				.setTicker(man).setContentText(man)
-				.setContentTitle(man)
-				.setContentIntent(pendingIntent).setContentText(message)
-				.setSmallIcon(R.drawable.logo)
-				.setDefaults(Notification.DEFAULT_SOUND)
-				.setAutoCancel(true)
-				.build();
-			}else {
+						.setTicker(man).setContentText(man)
+						.setContentTitle(man).setContentIntent(pendingIntent)
+						.setContentText(message).setSmallIcon(R.drawable.logo)
+						.setDefaults(Notification.DEFAULT_SOUND)
+						.setAutoCancel(true).build();
+			} else if (MsgSettingActivity.getIsvir(context)) {
 				notification = new NotificationCompat.Builder(context)
-				.setTicker(man).setContentText(man)
-				.setContentTitle(man)
-				.setContentIntent(pendingIntent).setContentText(message)
-				.setSmallIcon(R.drawable.logo)
-				.setDefaults(Notification.DEFAULT_VIBRATE)
-				.setAutoCancel(true)
-				.build();
+						.setTicker(man).setContentText(man)
+						.setContentTitle(man).setContentIntent(pendingIntent)
+						.setContentText(message).setSmallIcon(R.drawable.logo)
+						.setDefaults(Notification.DEFAULT_VIBRATE)
+						.setAutoCancel(true).build();
+			} else {
+				notification = new NotificationCompat.Builder(context)
+						.setTicker(man).setContentText(man)
+						.setContentTitle(man).setContentIntent(pendingIntent)
+						.setContentText(message).setSmallIcon(R.drawable.logo)
+						.setAutoCancel(true).build();
 			}
-			
-			
-			
+
 			notificationManager.notify(ContantS.CHAT_MSG, notification);
 
 			break;
@@ -92,12 +90,14 @@ public class NoticeUtils {
 
 		notificationManager.cancel(id);
 	}
+
 	public static void showSuccessfulNotification(Context context) {
 		if (null == notificationManager) {
 			notificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
 		}
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				context)
 				.setTicker(context.getString(R.string.send_successfully))
 				.setContentTitle(context.getString(R.string.send_successfully))
 				.setOnlyAlertOnce(true).setAutoCancel(true)
@@ -112,30 +112,28 @@ public class NoticeUtils {
 		}, 3000);
 	}
 
-	public static void showFailePublish(Context context){
-		
+	public static void showFailePublish(Context context) {
+
 		if (null == notificationManager) {
 			notificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
 		}
-		
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-         .setTicker(context.getString(R.string.send_failed))
-         .setContentTitle(context.getString(R.string.send_failed))
-         .setOnlyAlertOnce(true)
-         .setAutoCancel(true)
-         .setSmallIcon(R.drawable.send_failed)
-         .setOngoing(false);
-		 
-		 Notification notification = builder.build();
-			notificationManager.notify(100, notification);
-			mHandler.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					notificationManager.cancel(100);
-				}
-			}, 3000);
-		 
+
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				context).setTicker(context.getString(R.string.send_failed))
+				.setContentTitle(context.getString(R.string.send_failed))
+				.setOnlyAlertOnce(true).setAutoCancel(true)
+				.setSmallIcon(R.drawable.send_failed).setOngoing(false);
+
+		Notification notification = builder.build();
+		notificationManager.notify(100, notification);
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				notificationManager.cancel(100);
+			}
+		}, 3000);
+
 	}
 
 	/**
@@ -157,7 +155,7 @@ public class NoticeUtils {
 
 		Notification notification = null;
 
-		switch (id) {		
+		switch (id) {
 		case ContantS.PUBLISH_MOOD_ID:
 
 			notification = new NotificationCompat.Builder(context)
@@ -180,31 +178,28 @@ public class NoticeUtils {
 					.setOnlyAlertOnce(true).setOngoing(true)
 					.setSmallIcon(R.drawable.upload_white).build();
 			notificationManager.notify(id, notification);
-			break;	
-			
-			
-			
+			break;
+
 		default:
 			break;
 		}
 	}
-	public static void showProgressPublish(Context context,int progress,int max,int id){
+
+	public static void showProgressPublish(Context context, int progress,
+			int max, int id) {
 		if (null == notificationManager) {
 			notificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
 		}
-		
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-        .setTicker(context.getString(R.string.send_photo))
-        .setContentTitle(context.getString(R.string.send_photo))
-        .setOnlyAlertOnce(true)
-        .setAutoCancel(true)
-        .setSmallIcon(R.drawable.upload_white)
-        .setProgress(max, progress, false)
-        .setOngoing(false);
-		 Notification notification = builder.build();
+
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				context).setTicker(context.getString(R.string.send_photo))
+				.setContentTitle(context.getString(R.string.send_photo))
+				.setOnlyAlertOnce(true).setAutoCancel(true)
+				.setSmallIcon(R.drawable.upload_white)
+				.setProgress(max, progress, false).setOngoing(false);
+		Notification notification = builder.build();
 		notificationManager.notify(id, notification);
-		
-		
+
 	}
 }

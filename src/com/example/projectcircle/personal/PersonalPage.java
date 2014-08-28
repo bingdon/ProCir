@@ -1138,7 +1138,7 @@ public class PersonalPage extends Activity {
 
 	}
 
-	private void denyfriend(String ccid) {
+	private void denyfriend(final String ccid) {
 		// TODO Auto-generated method stub
 		AsyncHttpResponseHandler res = new AsyncHttpResponseHandler() {
 			@Override
@@ -1158,6 +1158,7 @@ public class PersonalPage extends Activity {
 						Intent intent2 = new Intent();
 						intent2.setAction("shan.chu.hao.you");
 						PersonalPage.this.sendBroadcast(intent2);
+						new FriendDatabaseUtils(PersonalPage.this).delete(ccid);
 						finish();
 					} else {
 						Toast.makeText(PersonalPage.this, "É¾³ýÊ§°Ü£¡",
